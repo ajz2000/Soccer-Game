@@ -15,6 +15,8 @@ public class SoccerGame extends JPanel{
   private int scaleRatio = 3;
   private ArrayList<Wall> wallList= new ArrayList<Wall>();
   private Player player1 = new Player(100,100,1);
+  static boolean debugOn = false;
+  
   public SoccerGame(){
     addKeyListener(new KeyListener() {
       @Override
@@ -27,6 +29,9 @@ public class SoccerGame extends JPanel{
       @Override
       public void keyPressed(KeyEvent e) {
         player1.keyPressed(e);
+        if(e.getKeyCode() == KeyEvent.VK_Z){
+        SoccerGame.debugOn = !SoccerGame.debugOn;
+        }
       }
     });
     setFocusable(true); 
@@ -34,7 +39,6 @@ public class SoccerGame extends JPanel{
     screenWidth = (int)screenSize.getWidth();
     screenHeight = (int)screenSize.getHeight();
     currentLevel = new Level("level",this);
-    
   }
   
   public void move(){

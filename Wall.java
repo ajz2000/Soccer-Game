@@ -12,11 +12,12 @@ public class Wall{
   }
   
   public void paint(Graphics2D g2d){
-    
+    if(SoccerGame.debugOn){
     g2d.setColor(Color.RED);
     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
     g2d.fill(hitBox);
     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+    }
   }
   
     public Rectangle getHitBox(){

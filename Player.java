@@ -23,6 +23,8 @@ public class Player{
   private Rectangle hitBox = new Rectangle();
   private int jumpTimer = 0;
   private boolean jumping = false;
+  private int decelTimer = 0;
+  private boolean touchingGround = false;
   
   public Player (int x, int y, int team){
     this.x = x;
@@ -41,21 +43,32 @@ public class Player{
   
   public void move(){
     if(movingLeft){
-      xa = -1;
+      xa = -3;
     } 
     else if (movingRight){
-      xa = 1;
+      xa = 3;
     }
     else{
-      xa = 0;
-    }
+      if(decelTimer > 20){
+      if(xa > 0){
+        xa--;
+      }
+      if (xa < 0){
+        xa++;
+      }
+      decelTimer = 0;
+      }
+      else{
+        decelTimer++;
+      }
+      }
     
     if(movingRight&&movingLeft){
       xa = 0;
     }
-    ya = 2;
+    ya = 5;
     if(jumping){
-      ya = -3;
+      ya = -8;
       jumpTimer++;
     }
     if(jumpTimer>10){
@@ -69,6 +82,7 @@ public class Player{
   }
   
   public void collide(ArrayList<Wall> toCollide){
+    touchingGround = false;
     for(int i = 0; i < toCollide.size(); i++){
       if(hitBox.intersects((toCollide.get(i)).getHitBox())){
         Rectangle intersection = hitBox.intersection(toCollide.get(i).getHitBox());
@@ -82,6 +96,7 @@ public class Player{
         }
         else if (intersection.width>2){
           adjustY(intersection.height);
+          touchingGround = true;
         }
         
       }
@@ -90,11 +105,13 @@ public class Player{
   
   public void paint(Graphics2D g2d){
     g2d.drawImage(sprite,x,y,null);
-    
+    if(SoccerGame.debugOn){
     g2d.setColor(Color.GREEN);
     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
     g2d.fill(hitBox);
     g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+    g2d.drawString(String.valueOf(touchingGround),50,50);
+    }
   }
   
   public void keyPressed(KeyEvent e){
